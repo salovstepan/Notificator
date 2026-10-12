@@ -13,7 +13,7 @@ internal class NotificatorDbContext(DbContextOptions options) : DbContext(option
         var subscriber = modelBuilder.Entity<Subscriber>();
         subscriber.ToTable("subscribers");
         subscriber.HasKey(u => u.Id);
-        subscriber.Property(u => u.Id).HasColumnName("id").UseAutoincrement();
+        subscriber.Property(u => u.Id).HasColumnName("id");
         subscriber.Property(u => u.Username).HasColumnName("username");
         subscriber.Property(u => u.CreatedAt).HasColumnName("created_at");
         subscriber.Property(u => u.Deleted).HasColumnName("deleted").HasDefaultValue(false);
@@ -23,8 +23,9 @@ internal class NotificatorDbContext(DbContextOptions options) : DbContext(option
 
         var apartment = modelBuilder.Entity<Apartment>();
         apartment.HasKey(u => u.Id);
-        apartment.Property(u => u.Id).HasColumnName("id").UseAutoincrement();
+        apartment.Property(u => u.Id).HasColumnName("id");
         apartment.Property(u => u.Name).HasColumnName("name").HasMaxLength(400); // 400 символов для адреса должно хватить
+        apartment.Property(u => u.Deleted).HasColumnName("deleted").HasDefaultValue(false);
         apartment.HasMany(u => u.Subscribers).WithOne(u => u.Apartment);
 
         var schedule = modelBuilder.Entity<Schedule>();

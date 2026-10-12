@@ -15,5 +15,7 @@ obj/
 misk.txt
 
 # appsettings
-appsettings.json
+#appsettings.json
 appsettings.Development.json
+
+.env

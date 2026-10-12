@@ -16,23 +16,23 @@ public static class ServiceExtention
         var connectionString = configuration.GetConnectionString("Default")
             ?? throw new Exception("ConnectionStrings:Default is not defined!");
 
-        // Добавляем HttpClient для echo сервиса
-        services.AddHttpClient();
-
-        // Этот сервис отправляет сам себе http запрос, это нужно что-бы сервис не засыпал
-        // По умолчанию хостинг уводит сервис в сон каждые 15 минут
-        services.AddHostedService<EchoService>();
-
-        // Регистрируем Телеграм как синглтон, так как вызываться он
-        // будет не только из сервиса рассылки, но и из сервиса отслеживающего сообщения в чате
-        services.AddSingleton(_ => new TelegramBotClient(TelegramToken));
-        services.AddSingleton<ITelegramBotClient>(sp => sp.GetRequiredService<TelegramBotClient>());
-
         // Добавляем db context в качестве базы будем юзать SQLite
         services.AddDbContext<NotificatorDbContext>(options =>
         {
             options.UseSqlite(connectionString);
         });
+
+        // Добавляем HttpClient для echo сервиса
+        services.AddHttpClient();
+
+        // Этот сервис отправляет сам себе http запрос, это нужно что-бы сервис не засыпал
+        // По умолчанию хостинг уводит сервис в сон каждые 15 минут
+        // services.AddHostedService<EchoService>();
+
+        // Регистрируем Телеграм как синглтон, так как вызываться он
+        // будет не только из сервиса рассылки, но и из сервиса отслеживающего сообщения в чате
+        services.AddSingleton(_ => new TelegramBotClient(TelegramToken));
+        services.AddSingleton<ITelegramBotClient>(sp => sp.GetRequiredService<TelegramBotClient>());
 
         // Добавляем в service collection основную логику реализованую в MessageHandler
         services.AddScoped<IMessageHandler, MessageHandler>();
@@ -41,7 +41,7 @@ public static class ServiceExtention
         services.AddHostedService<TelegramService>();
 
         // Регистрируем сервис уведомлений
-        services.AddHostedService<NotificationService>();
+        // services.AddHostedService<NotificationService>();
 
         // Указывам IHost что сервисы будут запускаться и останавливаться одновременно
         services.Configure<HostOptions>(options =>

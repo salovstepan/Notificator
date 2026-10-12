@@ -5,6 +5,7 @@ namespace Notificator.Services;
 
 internal class EchoService(HttpClient httpClient, ILogger<EchoService> logger) : BackgroundService
 {
+    // сервер уводит сервис в сон каждые 15 минут, ставим таймер на 14 минут
     private readonly TimeSpan period = TimeSpan.FromMinutes(14);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -17,7 +18,7 @@ internal class EchoService(HttpClient httpClient, ILogger<EchoService> logger) :
             {
                 var echo = Guid.NewGuid().ToString("N")[..10];
 
-                var response = await httpClient.GetAsync($"https://autosourse.onrender.com/api/echo?echo={echo}", stoppingToken);
+                var response = await httpClient.GetAsync($"https://notificator.onrender.com/api/echo?echo={echo}", stoppingToken);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {

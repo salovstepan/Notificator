@@ -41,7 +41,7 @@ internal class TelegramService(TelegramBotClient client, ILogger<TelegramService
         var executionService = scope.ServiceProvider.GetRequiredService<IMessageHandler>()
             ?? throw new Exception("Try to get the ExecutionService is failure");
 
-        await executionService.HandleCallbackAsync(client, update.CallbackQuery, cancellationToken);
+        await executionService.HandleCallbackAsync(client, update, cancellationToken);
     }
 
     private Task OnError(Exception exception, HandleErrorSource source)
