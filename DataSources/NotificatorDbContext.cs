@@ -17,7 +17,7 @@ internal class NotificatorDbContext(DbContextOptions options) : DbContext(option
         subscriber.Property(u => u.Username).HasColumnName("username");
         subscriber.Property(u => u.CreatedAt).HasColumnName("created_at");
         subscriber.Property(u => u.Deleted).HasColumnName("deleted").HasDefaultValue(false);
-        subscriber.Property(u => u.IsActive).HasColumnName("is_active").HasDefaultValue(false);
+        subscriber.Property(u => u.IsActive).HasColumnName("is_active").HasDefaultValue(true);
         subscriber.Property(u => u.ApartmentId).HasColumnName("apartment_id");
         subscriber.HasOne(u => u.Apartment).WithMany(u => u.Subscribers).HasForeignKey(u => u.ApartmentId);
 

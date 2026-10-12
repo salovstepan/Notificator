@@ -89,6 +89,10 @@ namespace Notificator.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_active");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT")
