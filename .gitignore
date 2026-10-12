@@ -1,0 +1,19 @@
+
+# Visual Studio Code settings
+.vscode/
+
+# Local publish folder
+publish/
+
+# Build results
+bin/
+obj/
+
+# logs
+*.log
+
+misk.txt
+
+# appsettings
+appsettings.json
+appsettings.Development.json
