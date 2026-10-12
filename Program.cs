@@ -25,14 +25,24 @@ public class Program
 
 internal class MessageHandler : IMessageHandler
 {
-    public Task HandleCallbackAsync(TelegramBotClient client, CallbackQuery? callback, CancellationToken cancellationToken)
+    public async Task HandleMessageAsync(TelegramBotClient client, Message message, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+
+        var text = "message";
+
+        
+        await client.SendMessage(message.Chat.Id, text, cancellationToken: cancellationToken);
+
     }
 
-    public Task HandleMessageAsync(TelegramBotClient client, Message message, CancellationToken cancellationToken)
+    public async Task HandleCallbackAsync(TelegramBotClient client, CallbackQuery? callback, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (callback is null) return;
+
+        var text = "callback";
+
+        
+        await client.SendMessage(callback.From.Id, text, cancellationToken: cancellationToken);
     }
 }
 
