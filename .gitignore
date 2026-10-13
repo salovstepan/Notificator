@@ -12,9 +12,6 @@ obj/
 # logs
 *.log
 
-# Migrations
-Migrations/
-
 # Database
 *.db
 *.db-shm
