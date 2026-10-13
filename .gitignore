@@ -15,6 +15,11 @@ obj/
 # Migrations
 Migrations/
 
+# Database
+*.db
+*.db-shm
+*.db-wal
+
 misk.txt
 
 # appsettings
