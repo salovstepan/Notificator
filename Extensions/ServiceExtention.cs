@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Notificator.Applications;
+using Notificator.Applications.Abstractions;
 using Notificator.DataSources;
 using Notificator.Services;
 using Telegram.Bot;

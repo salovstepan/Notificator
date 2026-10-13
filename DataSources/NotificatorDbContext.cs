@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Notificator.Models;
 
 namespace Notificator.DataSources;
 

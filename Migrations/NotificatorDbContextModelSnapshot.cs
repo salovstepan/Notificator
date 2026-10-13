@@ -18,7 +18,7 @@ namespace Notificator.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
-            modelBuilder.Entity("Notificator.Apartment", b =>
+            modelBuilder.Entity("Notificator.Models.Apartment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace Notificator.Migrations
                     b.ToTable("Apartments");
                 });
 
-            modelBuilder.Entity("Notificator.Schedule", b =>
+            modelBuilder.Entity("Notificator.Models.Schedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,7 +75,7 @@ namespace Notificator.Migrations
                     b.ToTable("Schedules");
                 });
 
-            modelBuilder.Entity("Notificator.Subscriber", b =>
+            modelBuilder.Entity("Notificator.Models.Subscriber", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,6 +112,10 @@ namespace Notificator.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -124,9 +128,9 @@ namespace Notificator.Migrations
                     b.ToTable("subscribers", (string)null);
                 });
 
-            modelBuilder.Entity("Notificator.Schedule", b =>
+            modelBuilder.Entity("Notificator.Models.Schedule", b =>
                 {
-                    b.HasOne("Notificator.Apartment", "Apartment")
+                    b.HasOne("Notificator.Models.Apartment", "Apartment")
                         .WithMany("Schedules")
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -135,9 +139,9 @@ namespace Notificator.Migrations
                     b.Navigation("Apartment");
                 });
 
-            modelBuilder.Entity("Notificator.Subscriber", b =>
+            modelBuilder.Entity("Notificator.Models.Subscriber", b =>
                 {
-                    b.HasOne("Notificator.Apartment", "Apartment")
+                    b.HasOne("Notificator.Models.Apartment", "Apartment")
                         .WithMany("Subscribers")
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -146,7 +150,7 @@ namespace Notificator.Migrations
                     b.Navigation("Apartment");
                 });
 
-            modelBuilder.Entity("Notificator.Apartment", b =>
+            modelBuilder.Entity("Notificator.Models.Apartment", b =>
                 {
                     b.Navigation("Schedules");
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Notificator.DataSources;
+using Notificator.Models;
 
 namespace Notificator.Controllers;
 
@@ -180,6 +181,7 @@ public class ApartmentController(NotificatorDbContext dbContext) : ControllerBas
         item.Order = request.Order is null ? item.Order : (int)request.Order;
         item.IsActive = request.IsActive is null ? item.IsActive : (bool)request.IsActive;
         item.IsCurrent = request.IsCurrent is null ? item.IsCurrent : (bool)request.IsCurrent;
+        item.Role = request.Role is null ? item.Role : request.Role;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -192,6 +194,7 @@ public record SubscriberUpdateRequest
     public int? Order { get; set; }
     public bool? IsActive { get; set; }
     public bool? IsCurrent { get; set; }
+    public string? Role { get; set; }
 }
 
 public record ScheduleAddRequest
