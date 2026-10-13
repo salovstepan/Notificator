@@ -51,13 +51,26 @@ namespace Notificator.Migrations
 
                     SqlitePropertyBuilderExtensions.UseAutoincrement(b.Property<int>("Id"));
 
+                    b.Property<long>("ApartmentId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("apartment_id");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("day");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("TEXT")
                         .HasColumnName("description");
 
+                    b.Property<DateTime>("LastNotification")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ApartmentId");
 
                     b.ToTable("Schedules");
                 });
@@ -86,12 +99,18 @@ namespace Notificator.Migrations
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false)
+                        .HasDefaultValue(true)
                         .HasColumnName("is_active");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -103,6 +122,17 @@ namespace Notificator.Migrations
                     b.HasIndex("ApartmentId");
 
                     b.ToTable("subscribers", (string)null);
+                });
+
+            modelBuilder.Entity("Notificator.Schedule", b =>
+                {
+                    b.HasOne("Notificator.Apartment", "Apartment")
+                        .WithMany("Schedules")
+                        .HasForeignKey("ApartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Apartment");
                 });
 
             modelBuilder.Entity("Notificator.Subscriber", b =>
@@ -118,6 +148,8 @@ namespace Notificator.Migrations
 
             modelBuilder.Entity("Notificator.Apartment", b =>
                 {
+                    b.Navigation("Schedules");
+
                     b.Navigation("Subscribers");
                 });
 #pragma warning restore 612, 618

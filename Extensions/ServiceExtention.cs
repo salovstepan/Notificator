@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Notificator.DataSources;
 using Notificator.Services;
@@ -27,7 +28,7 @@ public static class ServiceExtention
 
         // Этот сервис отправляет сам себе http запрос, это нужно что-бы сервис не засыпал
         // По умолчанию хостинг уводит сервис в сон каждые 15 минут
-        // services.AddHostedService<EchoService>();
+        services.AddHostedService<EchoService>();
 
         // Регистрируем Телеграм как синглтон, так как вызываться он
         // будет не только из сервиса рассылки, но и из сервиса отслеживающего сообщения в чате
@@ -41,7 +42,7 @@ public static class ServiceExtention
         services.AddHostedService<TelegramService>();
 
         // Регистрируем сервис уведомлений
-        // services.AddHostedService<NotificationService>();
+        services.AddHostedService<NotificationService>();
 
         // Указывам IHost что сервисы будут запускаться и останавливаться одновременно
         services.Configure<HostOptions>(options =>
@@ -50,7 +51,10 @@ public static class ServiceExtention
             options.ServicesStopConcurrently = true;
         });
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
         
         return services;
     }

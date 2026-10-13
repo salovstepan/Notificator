@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Notificator.DataSources;
 using Notificator.Extensions;
@@ -67,6 +68,7 @@ internal class MessageHandler(NotificatorDbContext dbContext, ILogger<MessageHan
                     Name = message.From.FirstName,
                     ApartmentId = apartment.Id,
                     Username = message.From.Username ?? "no name",
+                    IsActive = true
                 };
                 await dbContext.Subscribers.AddAsync(subscriber, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
@@ -80,7 +82,27 @@ internal class MessageHandler(NotificatorDbContext dbContext, ILogger<MessageHan
 
             await client.SendMessage(message.Chat.Id, replay, cancellationToken: cancellationToken);
         }
-    
+
+        if (message.Text.StartsWith("/deleteme"))
+        {
+            var user = await dbContext.Subscribers
+                .FirstOrDefaultAsync(u => u.Id == message.From.Id && !u.Deleted, cancellationToken);
+
+            if (user is null)
+            {
+                logger.LogInformation($"Пользователь id:{message.From.Id} не найден");
+                return;
+            }
+
+            user.Deleted = true;
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await client.SendMessage(message.Chat.Id,
+                $"Пользователь {user.Name} (@{user.Username}) удален из расписания, график сместился",
+                cancellationToken: cancellationToken);
+        }
+
         if (message.Text.StartsWith("/users"))
         {
             var chatId = message.Chat.Id;
@@ -111,9 +133,6 @@ internal class MessageHandler(NotificatorDbContext dbContext, ILogger<MessageHan
                 replyMarkup: new InlineKeyboardMarkup(users),
                 cancellationToken: cancellationToken);
         }
-
-        logger.LogInformation("выполненна команда");
-    
     }
 
     public async Task HandleCallbackAsync(TelegramBotClient client, Update update, CancellationToken cancellationToken)
@@ -240,9 +259,7 @@ internal class MessageHandler(NotificatorDbContext dbContext, ILogger<MessageHan
                     return;
                 }
 
-                List<InlineKeyboardButton[]> actions = [
-                    [InlineKeyboardButton.WithCallbackData("Посмотреть расписание", $"schedule:{user.Id}")]                    
-                ];
+                List<InlineKeyboardButton[]> actions = [];
 
                 if (user.IsActive)
                 {
@@ -276,6 +293,10 @@ public class Schedule
 {
     public int Id { get; set; }
     public required string Description { get; set; } // тут будет хранится описания того, что нужно делать постояльцу
+    public DayOfWeek Day { get; set; }
+    public DateTime LastNotification { get; set; }
+    public Apartment? Apartment { get; set; }
+    public long ApartmentId { get; set; }
 }
 
 // Entity для хранения квартир
@@ -285,6 +306,7 @@ public class Apartment
     public required string Name { get; set; }
     public bool Deleted { get; set; }
     public ICollection<Subscriber> Subscribers { get; set; } = []; // инициализируем для удобвства
+    public ICollection<Schedule> Schedules { get; set; } = [];
 }
 
 // Entity для хранения пользователей
@@ -292,10 +314,12 @@ public class Subscriber
 {
     public long Id { get; set; }
     public required string Name { get; set; }
+    public int Order { get; set; }
     public required string Username { get; set; }
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
     public bool Deleted { get; set; } // Удален, когад пользователь выселился
     public bool IsActive { get; set; } // не активен когда пользователь временно отсутствует
     public Apartment? Apartment { get; set; }
     public long ApartmentId { get; set; }
+    public bool IsCurrent { get; set; }
 }
