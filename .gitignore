@@ -12,6 +12,9 @@ obj/
 # logs
 *.log
 
+# Migrations
+Migrations/
+
 misk.txt
 
 # appsettings
