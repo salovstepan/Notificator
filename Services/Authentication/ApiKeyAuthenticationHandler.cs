@@ -14,11 +14,9 @@ public class ApiKeyAuthenticationHandler(
     UrlEncoder encoder,
     IConfiguration configuration) : AuthenticationHandler<ApiKeyAuthenticationOptions>(options, logger, encoder)
 {
-    private const string ApiKeyHeaderName = "API-Key";
-
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!Request.Headers.TryGetValue(ApiKeyHeaderName, out var apiKey))
+        if (!Request.Headers.TryGetValue("API-Key", out var apiKey))
         {
             return Task.FromResult(AuthenticateResult.Fail("API Key отсутствует."));
         }

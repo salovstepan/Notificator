@@ -54,12 +54,13 @@ public static class ServiceExtention
             options.ServicesStopConcurrently = true;
         });
 
+        // Игнорируем null в ответах api сервиса
         services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
 
-        // Безопасность для api
+        // Добавляем аунтификацию для api сервиса
         services.AddAuthentication(ApiKeyAuthenticationOptions.DefaultScheme)
             .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationOptions.DefaultScheme, null);
         

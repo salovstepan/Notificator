@@ -4,7 +4,7 @@ namespace Notificator;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,9 @@ public class Program
         builder.Services.AddApplication(builder.Configuration);
 
         var app = builder.Build();
+
+        // Автоматически применяем миграцию базы данных
+        await app.MigrationsAsync();
 
         app.UseAuthentication(); 
         app.UseAuthorization();
