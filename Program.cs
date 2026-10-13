@@ -8,10 +8,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Подгружаем чувствительные данные из окружения
+        // Подгружаем и добавляем чувствительные данные из окружения
         DotNetEnv.Env.Load();
 
-        // Добавляем чувствительные данные
         builder.Configuration.AddEnvironmentVariables().Build();
 
         // Регистрируем наше приложение
@@ -19,6 +18,7 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseAuthentication(); 
         app.UseAuthorization();
 
         app.MapControllers();

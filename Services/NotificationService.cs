@@ -22,7 +22,7 @@ internal class NotificationService(TelegramBotClient client, ILogger<TelegramSer
         {
             while(await timer.WaitForNextTickAsync(stoppingToken))
             {
-                /*
+                
                 var now = DateTime.UtcNow.AddHours(2);
 
                 if (now.Hour > 9) continue;
@@ -72,7 +72,7 @@ internal class NotificationService(TelegramBotClient client, ILogger<TelegramSer
 
                     await dbContext.SaveChangesAsync(stoppingToken);
                 }
-                */
+                
             }
         }
         catch(Exception ex)

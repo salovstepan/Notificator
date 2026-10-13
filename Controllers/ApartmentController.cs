@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Notificator.DataSources;
@@ -7,6 +8,7 @@ namespace Notificator.Controllers;
 
 [ApiController]
 [Route("api/apartments")]
+[Authorize]
 public class ApartmentController(NotificatorDbContext dbContext) : ControllerBase
 {
     [HttpGet]

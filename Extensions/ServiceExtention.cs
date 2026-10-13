@@ -4,6 +4,7 @@ using Notificator.Applications;
 using Notificator.Applications.Abstractions;
 using Notificator.DataSources;
 using Notificator.Services;
+using Notificator.Services.Authentication;
 using Telegram.Bot;
 
 namespace Notificator.Extensions;
@@ -57,6 +58,10 @@ public static class ServiceExtention
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
+
+        // Безопасность для api
+        services.AddAuthentication(ApiKeyAuthenticationOptions.DefaultScheme)
+            .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationOptions.DefaultScheme, null);
         
         return services;
     }
